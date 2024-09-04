@@ -60,11 +60,34 @@ class PostController extends Controller
 }
  
 public function ListMyPosts()
-    {
-        $user = Auth::user();
-        $posts = Post::where('user_id', $user->id)->with('car')->get();
-        return response()->json($posts, 200);
-    }
+{
+    $user = Auth::user();
+    // Get the posts for the authenticated user, including the car info
+    $posts = Post::where('user_id', $user->id)->with('car')->get();
+    
+    // Map through the posts and extract car details
+    $favoritesData = $posts->map(function($post) {
+        return [
+            'id'=>$post->id,
+            'car' => [
+                'id' => $post->car->id,
+                'name' => $post->car->name,
+                'category' => $post->car->category,
+                'price' => $post->car->price,
+                'Url' => $post->car->Url,
+                'color' => $post->car->color,
+                'brand' => $post->car->brand,
+                'year' => $post->car->year,
+                'description' => $post->car->description,
+                'miles' => $post->car->miles,
+            ],
+        ];
+    });
+
+    return response()->json($favoritesData, 200);
+}
+
+
 
     public function DeletePost($id)
 {

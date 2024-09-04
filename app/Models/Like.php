@@ -12,13 +12,17 @@ class Like extends Model
     protected $table = 'likes';
 
     // Define the attributes that are mass assignable
-    protected $fillable = [ 'user_id', 'post_id'];
+    protected $fillable = ['user_id', 'post_id'];
 
-    public function Users(){
+    // Define the relationship between Like and User
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function Posts(){
+    // Define the relationship between Like and Post
+    public function post()
+    {
         return $this->belongsTo(Post::class);
     }
 }

@@ -49,10 +49,41 @@ class LikeController extends Controller
 
     // Get user's favorite posts
     public function ListFavorites()
-    {
-        $user = Auth::user();
-        $favorites = Like::where('user_id', $user->id)->with('post')->get();
+{
+    $user = Auth::user();
 
-        return response()->json($favorites, 200);
-    }
+    // Fetch all favorites for the authenticated user with the related post, car, and address
+    $favorites = Like::with(['post.car', 'post.address'])->where('user_id', $user->id)->get();
+
+    // Map to structure the data as needed for the response
+    $favoritesData = $favorites->map(function($favorite) {
+        $post = $favorite->post;
+        return [
+            'post_id' => $post->id,
+            'car' => [
+                'id' => $post->car->id,
+                'name' => $post->car->name,
+                'category' => $post->car->category,
+                'price' => $post->car->price,
+                'Url' => $post->car->Url,
+                'color'=>$post->car->color,
+                'brand'=>$post->car->brand,
+                'year'=>$post->car->year,
+                'description'=>$post->car->description,
+                'miles'=>$post->car->miles,
+            ],
+            'address' => [
+                'id' => $post->address->id,
+                'street' => $post->address->street,
+                'city' => $post->address->city,
+                'country'=>$post->address->country,
+                'description'=>$post->address->description
+            ],
+        ];
+    });
+
+    return response()->json($favoritesData, 200);
+}
+
+    
 }
