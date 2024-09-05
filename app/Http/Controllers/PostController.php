@@ -68,7 +68,7 @@ public function ListMyPosts()
     // Map through the posts and extract car details
     $favoritesData = $posts->map(function($post) {
         return [
-            'id'=>$post->id,
+            'MyPostId'=>$post->id,
             'car' => [
                 'id' => $post->car->id,
                 'name' => $post->car->name,
@@ -87,6 +87,19 @@ public function ListMyPosts()
     return response()->json($favoritesData, 200);
 }
 
+public function getPostById($id)
+    {
+        // Find the post by ID
+        $post = Post::with([ 'address', 'car','pictures'])->find($id);
+
+        // Check if post exists
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
+
+        // Return the post data as JSON
+        return response()->json($post);
+    }
 
 
     public function DeletePost($id)
@@ -106,6 +119,49 @@ public function ListMyPosts()
 
     return response()->json(['message' => 'Post deleted successfully'], 200);
 }
+
+public function updatePost(Request $request, $id)
+{
+    try {
+        $user = auth()->user();
+        $post = Post::with(['address', 'car', 'pictures'])->find($id);
+
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+
+        if ($post->user_id !== $user->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Update Address
+        $post->address->update($request->input('address'));
+
+        // Update Car
+        $post->car->update($request->input('car'));
+
+        
+        $post->pictures()->delete();
+        
+        // Add new pictures
+        foreach ($request->input('pictures') as $pictureData) {
+            Picture::create([
+                'post_id' => $post->id,
+                'Url' => $pictureData['Url'],
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Post updated successfully!',
+            'post' => $post->load(['address', 'car', 'pictures']),
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to update post', 'message' => $e->getMessage()], 500);
+    }
+}
+
+
+
 }
 
 

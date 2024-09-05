@@ -26,6 +26,7 @@ Route::post('/login',[AuthController::class,'login']);
 Route::post('/register',[AuthController::class,'register']);
 
 Route::get('/posts',[PostController::class,'index']);
+Route::get('/post/{id}',[PostController::class,'getPostById']);
 Route::middleware('auth:sanctum')->post('/StorePost', [PostController::class, 'StoreFullPost']);
 
 Route::middleware('auth:sanctum')->post('/{postId}/FavoriteList', [LikeController::class, 'StoreFavorite']);
@@ -34,6 +35,7 @@ Route::middleware('auth:sanctum')->get('/addFavorite', [LikeController::class, '
 
 Route::middleware('auth:sanctum')->get('/ListMyPosts', [PostController::class, 'ListMyPosts']);
 Route::middleware('auth:sanctum')->delete('/{postId}/deletePost', [PostController::class, 'DeletePost']);
+Route::middleware('auth:sanctum')->put('/{id}/updatePost', [PostController::class, 'UpdatePost']);
 
 Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'UserData']);
 Route::middleware('auth:sanctum')->put('/UserUpdate', [UserController::class, 'UserUpdate']);

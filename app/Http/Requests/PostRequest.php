@@ -22,23 +22,26 @@ class PostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'address'       => 'required|array',
-            'address.country'   => 'required|string|max:255',
-            'address.street'    => 'required|string|max:255',
-            'address.city'      => 'required|string|max:255',
+            'address' => 'required|array',
+            'address.address_id' => 'required|integer|exists:addresses,id',
+            'address.country' => 'required|string|max:255',
+            'address.street' => 'required|string|max:255',
+            'address.city' => 'required|string|max:255',
             'address.description' => 'nullable|string',
 
-            'car'           => 'required|array',
-            'car.category'  => 'required|string|max:255',
-            'car.brand'     => 'required|string|max:255',
-            'car.name'      => 'required|string|max:255',
-            'car.color'     => 'required|string|max:255',
+            'car' => 'required|array',
+            'car.car_id' => 'required|integer|exists:cars,id',
+            'car.category' => 'required|string|max:255',
+            'car.brand' => 'required|string|max:255',
+            'car.name' => 'required|string|max:255',
+            'car.color' => 'required|string|max:255',
             'car.description' => 'nullable|string',
-            'car.miles'     => 'required|numeric',
-            'car.year'     => 'required|integer',
-            'car.Url'       => 'required|url',
+            'car.miles' => 'required|numeric',
+            'car.year' => 'required|integer',
+            'car.price' => 'required|numeric', // Add validation for price if needed
 
-            'pictures'      => 'required|array',
+            'pictures' => 'nullable|array',
+            'pictures.*.id' => 'required|integer|exists:pictures,id', // Ensure picture IDs exist
             'pictures.*.Url' => 'required|url',
         ];
     }
