@@ -88,18 +88,48 @@ public function ListMyPosts()
 }
 
 public function getPostById($id)
-    {
-        // Find the post by ID
-        $post = Post::with([ 'address', 'car','pictures'])->find($id);
+{
+    // Find the post by ID with related address, car, and pictures
+    $post = Post::with(['address', 'car', 'pictures'])->find($id);
 
-        // Check if post exists
-        if (!$post) {
-            return response()->json(['message' => 'Post not found'], 404);
-        }
-
-        // Return the post data as JSON
-        return response()->json($post);
+    if (!$post) {
+        return response()->json(['error' => 'Post not found'], 404);
     }
+
+    // Prepare the response data with post details, including address, car, and pictures
+    $favoritesData = [
+        'id' => $post->id,
+        'car' => [
+            'id' => $post->car->id,
+            'name' => $post->car->name,
+            'category' => $post->car->category,
+            'price' => $post->car->price,
+            'Url' => $post->car->Url,
+            'color' => $post->car->color,
+            'brand' => $post->car->brand,
+            'year' => $post->car->year,
+            'description' => $post->car->description,
+            'miles' => $post->car->miles,
+        ],
+        'address' => [
+            'id' => $post->address->id,
+            'country' => $post->address->country,
+            'street' => $post->address->street,
+            'city' => $post->address->city,
+            'description' => $post->address->description,
+        ],
+        'pictures' => $post->pictures->map(function ($picture) {
+            return [
+                'id' => $picture->id,
+                'post_id' => $picture->post_id,
+                'Url' => $picture->Url,
+            ];
+        })->toArray(),
+    ];
+
+    return response()->json($favoritesData, 200);
+}
+
 
 
     public function DeletePost($id)

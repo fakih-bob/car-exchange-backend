@@ -26,7 +26,7 @@ Route::post('/login',[AuthController::class,'login']);
 Route::post('/register',[AuthController::class,'register']);
 
 Route::get('/posts',[PostController::class,'index']);
-Route::get('/post/{id}',[PostController::class,'getPostById']);
+Route::middleware('auth:sanctum')->get('/post/{id}',[PostController::class,'getPostById']);
 Route::middleware('auth:sanctum')->post('/StorePost', [PostController::class, 'StoreFullPost']);
 
 Route::middleware('auth:sanctum')->post('/{postId}/FavoriteList', [LikeController::class, 'StoreFavorite']);
