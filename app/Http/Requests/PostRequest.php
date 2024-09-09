@@ -23,14 +23,12 @@ class PostRequest extends FormRequest
     {
         return [
             'address' => 'required|array',
-            'address.address_id' => 'required|integer|exists:addresses,id',
             'address.country' => 'required|string|max:255',
             'address.street' => 'required|string|max:255',
             'address.city' => 'required|string|max:255',
             'address.description' => 'nullable|string',
 
             'car' => 'required|array',
-            'car.car_id' => 'required|integer|exists:cars,id',
             'car.category' => 'required|string|max:255',
             'car.brand' => 'required|string|max:255',
             'car.name' => 'required|string|max:255',
@@ -38,11 +36,10 @@ class PostRequest extends FormRequest
             'car.description' => 'nullable|string',
             'car.miles' => 'required|numeric',
             'car.year' => 'required|integer',
-            'car.price' => 'required|numeric', // Add validation for price if needed
+            'car.price' => 'required|numeric',
 
             'pictures' => 'nullable|array',
-            'pictures.*.id' => 'required|integer|exists:pictures,id', // Ensure picture IDs exist
-            'pictures.*.Url' => 'required|url',
+            'pictures.*.Url' => 'required|Url', // Assuming URL is the correct field name
         ];
     }
 }

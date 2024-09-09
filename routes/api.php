@@ -26,6 +26,8 @@ Route::post('/login',[AuthController::class,'login']);
 Route::post('/register',[AuthController::class,'register']);
 
 Route::get('/posts',[PostController::class,'index']);
+Route::get('/fetchByCategory/{category}',[PostController::class,'fetchByCategory']);
+
 Route::middleware('auth:sanctum')->get('/post/{id}',[PostController::class,'getPostById']);
 Route::middleware('auth:sanctum')->post('/StorePost', [PostController::class, 'StoreFullPost']);
 
