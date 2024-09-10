@@ -41,4 +41,5 @@ Route::middleware('auth:sanctum')->put('/{id}/updatePost', [PostController::clas
 
 Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'UserData']);
 Route::middleware('auth:sanctum')->put('/UserUpdate', [UserController::class, 'UserUpdate']);
+Route::middleware('auth:sanctum')->delete('/UserDelete', [UserController::class, 'UserDelete']);
 

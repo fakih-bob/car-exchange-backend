@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
+use App\Models\Car;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -25,5 +27,21 @@ class UserController extends Controller
             'status' => 'updated'
         ]);
     }
+
+    function UserDelete() {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $posts = Post::where('user_id', $user_id)->get();
+        foreach ($posts as $post) {
+            Car::where('post_id', $post->id)->delete();
+        }
+        Post::where('user_id', $user_id)->delete();
+        User::find($user_id)->delete();
+    
+        return response()->json([
+            'status' => 'deleted'
+        ]);
+    }
+    
 
 }
