@@ -6,7 +6,7 @@
 trigger:
 - main
 
-pool:
+pool:az400m05l05a-pool
   vmImage: ubuntu-latest
 
 steps:
