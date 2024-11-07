@@ -6,7 +6,8 @@
 trigger:
 - main
 
-pool:az400m05l05a-pool
+pool:
+  name:'self-hosted-pool'
   vmImage: ubuntu-latest
 
 steps:
