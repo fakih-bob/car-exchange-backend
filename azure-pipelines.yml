@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  name: 'self-hosted-pool'
+  name: ibfagentpool
   vmImage: ubuntu-latest
 
 steps:
